@@ -659,6 +659,7 @@ h2.sec,.cov h1,.grp .gh h2,.card .n4,.cardw .hd2 .n4,.dn1,.hero .go .t,.ph h3,.s
 #updBar .ui{font-size:22px}#updBar .ub{flex:1;font-size:14px;line-height:1.4}#updBar small{color:var(--mu);font-size:12.5px}
 #updBar .ugo{font:inherit;font-size:13.5px;font-weight:800;color:#fff;background:var(--tp);border:0;border-radius:var(--rb);padding:8px 16px;cursor:pointer;min-width:84px}
 #updBar .ux{border:0;background:none;color:var(--mu);font-size:16px;cursor:pointer}
+.refs ul{margin:6px 0 2px;padding-left:20px}.refs li{font-size:13.5px;line-height:1.55;margin:3px 0;color:var(--fg)}.refs summary .stn{margin-left:6px}
 </style>
 </head><body>
 <div id=app><div class=wrap><div class=cov><h1>고입 도우미</h1>
@@ -1630,8 +1631,8 @@ function thOpen(){
  });
 }
 /* ===== 새 버전 확인 (웹 주소로 열었을 때) ===== */
-var APP_VER="2026-11-27.2";/*VER:2026-11-27.2*/
-/*NOTES:학생 명렬 붙여넣기 예시를 가상 이름으로 변경*/
+var APP_VER="2026-11-27.3";/*VER:2026-11-27.3*/
+/*NOTES:설정에 참고자료 목록 추가, 입시 데이터 입력 메뉴 제거*/
 function updBase(){return location.href.split("#")[0].split("?")[0]}
 function updMsg(t){var e=document.getElementById("stV");if(e)e.textContent=t}
 function updBar(ver,notes){
@@ -1681,16 +1682,21 @@ function pkExport(){
  Object.keys(SCH).forEach(function(id){var c=SCH[id];o.schools[id]={n:c.n,ap:c.ap,tel:c.tel,ph:c.ph,d:c.d,nt:c.nt,pn:c.pn}});
  return JSON.stringify(o,null,1);
 }
+function REFS(){
+ var G=[
+ ["일정·원서 접수 (원서접수 매뉴얼)",["2027학년도 경상북도 고입전형 기본계획","고입 담임 매뉴얼 (고입담임매뉴얼.pdf)","2027 고입 원서 매뉴얼(담임) 웹페이지","각 학교 2027학년도 신입생 모집요강 (과학고·외고·마이스터고·특성화고·자사고 등)","신라공업고등학교 신입생 모집요강 (일반전형·성적 환산 방식)","경북예술고등학교 신입생 모집요강"]],
+ ["사전 작업·출력 옵션 (NEIS)",["NEIS 가산점 입력 안내 (행동특성·창체 가산점) — 2027학년도 고입 가산점 입력 안내 자료","NEIS 화면 캡처 (가산점 체크 화면)","고입 담임 매뉴얼의 학교생활기록부 출력·제출 안내 (상급학교 제출용, 외고·국제고·자사고 입시용)"]],
+ ["고입 상담 (성적 계산·합격 예측)",["일반고 내신 산출 지침 (일반고 학기말 석차 기준 300점 산출 방법)","각 학교 입학요강 기반 내신 성적 계산 (제철고·제철공고·흥해공고·신라공고 등)","포항제철고·포항제철공고·포항흥해공고 입학 예측 (2024·2025학년도 입시 자료)","2026학년도 포철중 입시 결과 (학교별 합격 인원)","포항 일반고 17개교 위치·거리 지도 (포항제철중 기준)","포항 일반고 입학정원 (2026·2027학년도 동일, 엑셀 자료)","포항동성고 합격 컷 210점·기숙사 270점 (담임 제공 자료, 연도 미확인)"]],
+ ["타 시도 일반고 (대구)",["2027학년도 대구광역시 고등학교 입학전형 기본계획","2027학년도 타 시·도 일반고등학교 입학예정자 중 대구광역시 전입 학생 입학 전 배정 계획","대구교육신문 기사 (2027학년도 기본계획·배정 방식) — 참고용"]]];
+ return "<div class=refs>"+G.map(function(g,i){return "<details class=stdt"+(i===0?" open":"")+"><summary>"+g[0]+" <span class=stn>"+g[1].length+"건</span></summary><ul>"+g[1].map(function(x){return "<li>"+x+"</li>"}).join("")+"</ul></details>"}).join("")+"<div class=stn style='margin-top:6px'>일정·요강은 해마다 바뀔 수 있으니 반드시 해당 학교 홈페이지와 교육청 공고로 다시 확인하세요.</div></div>";
+}
 function stOpen(){
  var o=document.getElementById("stov");if(o)o.remove();
  o=document.createElement("div");o.id="stov";o.className="ov";
  var tys=Object.keys(TC).filter(function(k){return k!=="타 시·도"});
- o.innerHTML="<div class=thp><div class=tb1><b>⚙ 설정</b><span>날짜 · 입시 데이터 · 학교 추가</span><i></i><button data-st-close=1>닫기</button></div><div class=tbd>"
+ o.innerHTML="<div class=thp><div class=tb1><b>⚙ 설정</b><span>날짜 · 참고자료 · 학교 추가 · 버전</span><i></i><button data-st-close=1>닫기</button></div><div class=tbd>"
  +"<div class=ts1>📅 오늘 날짜 (미리보기용)</div><div class=strow><input type=date id=stD value='"+iso(T)+"'><button class=stb data-st=today>오늘로</button><span class=stn>날짜를 바꾸면 접수 예정·진행중 같은 상태가 그 날짜 기준으로 표시됩니다.</span></div>"
- +"<div class=ts1>🗓 입시 데이터 (학년도)</div><div class=stn style='margin-bottom:6px'>지금 적용 중: <b>"+esc(PK_LABEL)+"</b></div>"
- +"<textarea id=stP rows=6 placeholder='새 학년도 데이터(JSON)를 붙여넣고 [적용]을 누르세요'></textarea>"
- +"<div class=strow><button class='stb pr' data-st=apply>적용</button><button class=stb data-st=export>현재 데이터 보기</button><label class=stb style='cursor:pointer'>파일 선택<input type=file id=stF accept='.json,.txt' style='display:none'></label><button class=stb data-st=reset>기본값으로 되돌리기</button></div>"
- +"<details class=stdt><summary>2028 입시계획은 어떻게 넣나요?</summary><div class=stn>① 시·도 교육청이 2028학년도 기본계획과 학교별 요강을 공개하면(보통 전년도 가을) PDF를 Claude에게 보냅니다. ② Claude가 이 앱 형식의 데이터(JSON)로 만들어 줍니다. ③ 위 칸에 붙여넣고 [적용]. 별도 API나 서버는 필요 없습니다. 이전 학년도로 돌아가려면 [기본값으로 되돌리기]를 누르세요. 요강을 바탕으로 한 성적 계산 화면(상담 도구)은 코드를 새로 만들어야 해서 Claude에게 요청해야 합니다.</div></details>"
+ +"<div class=ts1>📚 참고자료 (이 앱의 바탕이 된 자료)</div>"+REFS()
  +"<div class=ts1>➕ 학교 추가</div><div class=stg2>"
  +"<label>학교명<input id=sa_n placeholder='예: ○○고등학교'></label><label>유형<select id=sa_t>"+tys.map(function(t){return "<option>"+t+"</option>"}).join("")+"</select></label>"
  +"<label>접수 시작<input type=date id=sa_a></label><label>접수 끝<input type=date id=sa_b></label>"
@@ -1699,7 +1705,7 @@ function stOpen(){
  +"<div class=ts1>ℹ 프로그램 버전</div><div class=strow><span class=stn>현재 버전 <b>"+APP_VER+"</b></span><button class=stb data-st=upd>새 버전 확인</button><span class=stn id=stV></span></div>"
  +"</div></div>";
  document.body.appendChild(o);
- var P0=o.querySelector("#stP");
+ var P0={};
  o.addEventListener("change",function(e){
   if(e.target.id==="stD"&&/^\d{4}-\d\d-\d\d$/.test(e.target.value)){var p=e.target.value.split("-");T.setFullYear(+p[0],+p[1]-1,+p[2]);T.setHours(0,0,0,0);R()}
   if(e.target.id==="stF"&&e.target.files[0]){var fr=new FileReader();fr.onload=function(){P0.value=String(fr.result)};fr.readAsText(e.target.files[0])}
