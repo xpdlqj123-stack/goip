@@ -666,6 +666,17 @@ h2.sec,.cov h1,.grp .gh h2,.card .n4,.cardw .hd2 .n4,.dn1,.hero .go .t,.ph h3,.s
 #updBar.updbig .un{margin:8px 0 14px;font-size:16px;line-height:1.6;color:var(--fg)}
 #updBar.updbig .ugo{font-size:16px;padding:12px 28px}
 @keyframes updp{0%,100%{box-shadow:0 8px 24px rgba(20,30,50,.15)}50%{box-shadow:0 8px 30px var(--tp)}}
+#updDone.updbig{border-color:#1e9e6e;background:linear-gradient(135deg,var(--sf),#dff5ea);animation:none}
+#updDone.updbig .uh{color:#13795a}#updDone .uh small{font-size:13px;color:var(--mu);font-weight:600}
+#updDone ul{margin:0;padding-left:22px}#updDone li{margin:4px 0}
+#updDone .ugo{font:inherit;font-weight:800;color:#fff;background:#1e9e6e;border:0;border-radius:var(--rb);padding:12px 28px;font-size:16px;cursor:pointer}
+#updDone.updtop{position:fixed;left:50%;transform:translateX(-50%);top:12px;z-index:2000;display:flex;align-items:center;gap:12px;background:var(--sf);color:var(--fg);border:2px solid #1e9e6e;border-radius:14px;padding:10px 14px;box-shadow:0 10px 30px rgba(20,30,50,.3);max-width:min(560px,94vw)}
+#updDone.updtop .ub{flex:1;font-size:14px}#updDone.updtop .ugo{padding:8px 16px;font-size:13.5px}
+#updDone.updbig{position:static;display:block;margin:22px 0 0;padding:20px 24px;border:3px solid #1e9e6e;border-radius:calc(var(--rd) + 2px);box-shadow:0 8px 24px rgba(20,30,50,.15);text-align:left}
+#updDone.updbig .uh{display:flex;align-items:center;gap:10px;font-size:22px}
+#updDone.updbig .ui{font-size:28px}
+#updDone.updbig .un{margin:8px 0 14px;font-size:16px;line-height:1.6;color:var(--fg)}
+#updDone.updbig li{text-align:left}
 </style>
 </head><body>
 <div id=app><div class=wrap><div class=cov><h1>고입 도우미</h1>
@@ -1637,8 +1648,8 @@ function thOpen(){
  });
 }
 /* ===== 새 버전 확인 (웹 주소로 열었을 때) ===== */
-var APP_VER="2026-11-27.4";/*VER:2026-11-27.4*/
-/*NOTES:첫 화면에서 업데이트 알림이 크게 보이도록 개선했습니다. 설정에 참고자료 목록을 추가했고 입시 데이터 입력 메뉴는 제거했습니다.*/
+var APP_VER="2026-11-27.5";/*VER:2026-11-27.5*/
+/*NOTES:업데이트 후 첫 화면에 바뀐 내용을 보여 줍니다*/
 function updBase(){return location.href.split("#")[0].split("?")[0]}
 function updMsg(t){var e=document.getElementById("stV");if(e)e.textContent=t}
 var UPD=null;
@@ -1661,8 +1672,39 @@ function updPlace(){
  }
  b.querySelector(".ugo").onclick=updGo;
 }
+var APP_LOG=[["2026-11-27.3", "설정에 참고자료 목록을 추가했고 입시 데이터 입력 메뉴를 제거했습니다."], ["2026-11-27.4", "첫 화면에서 업데이트 알림이 크게 보이도록 개선했습니다."], ["2026-11-27.5", "업데이트가 적용된 뒤에도 바뀐 내용을 첫 화면에 안내합니다. [확인했어요]를 누르면 사라집니다."]],KV="gm27v",DONE=null;
+function verLoad(){try{return localStorage.getItem(KV)}catch(e){return null}}
+function verSave(v){try{localStorage.setItem(KV,v)}catch(e){}}
+function doneInit(){
+ var last=verLoad();
+ if(!last){verSave(APP_VER);return}
+ if(last===APP_VER)return;
+ var it=APP_LOG.filter(function(x){return x[0]>last});
+ if(!it.length)it=[[APP_VER,"새 일정·기능이 추가되었습니다."]];
+ DONE=it.map(function(x){return x[1]});
+}
+function donePlace(){
+ var old=document.getElementById("updDone");if(!DONE){if(old)old.remove();return}
+ var cov=document.querySelector(".cov .hero"),want=cov?"cov":"top";
+ if(old&&old.getAttribute("data-m")===want)return;
+ if(old)old.remove();
+ var b=document.createElement("div");b.id="updDone";b.setAttribute("data-m",want);
+ var li="<ul>"+DONE.map(function(t){return "<li>"+esc(t)+"</li>"}).join("")+"</ul>";
+ var ok=function(){verSave(APP_VER);DONE=null;b.remove()};
+ if(want==="cov"){
+  b.className="updbig updok";
+  b.innerHTML="<div class=uh><span class=ui>✅</span><b>업데이트되었습니다!</b> <small>버전 "+APP_VER+"</small></div><div class=un>"+li+"</div><button class=ugo>확인했어요</button>";
+  cov.parentNode.insertBefore(b,cov.nextSibling);
+ }else{
+  b.className="updtop";
+  b.innerHTML="<span class=ui>✅</span><span class=ub><b>업데이트되었습니다!</b><br><small>"+DONE.map(esc).join(" / ")+"</small></span><button class=ugo>확인</button>";
+  document.body.appendChild(b);
+ }
+ b.querySelector(".ugo").onclick=ok;
+}
+doneInit();
 function updBar(ver,notes){UPD={ver:ver,notes:notes};updPlace()}
-(function(){var r0=R;R=function(){r0.apply(this,arguments);try{updPlace()}catch(e){}}})();
+(function(){var r0=R;R=function(){r0.apply(this,arguments);try{updPlace();donePlace()}catch(e){}}})();
 function updCheck(manual){
  if(!/^https?:$/.test(location.protocol)){if(manual)updMsg("웹 주소로 열었을 때만 확인할 수 있어요");return}
  if(manual)updMsg("확인 중…");
@@ -1674,7 +1716,7 @@ function updCheck(manual){
   else if(manual)updMsg("최신 버전입니다");
  }).catch(function(){if(manual)updMsg("업데이트 서버에 연결할 수 없어요")});
 }
-setTimeout(function(){updCheck(false)},1200);setInterval(function(){if(!UPD)updCheck(false)},3600e3);document.addEventListener("visibilitychange",function(){if(!document.hidden&&!UPD)updCheck(false)});
+setTimeout(function(){try{donePlace()}catch(e){}},300);setTimeout(function(){updCheck(false)},1200);setInterval(function(){if(!UPD)updCheck(false)},3600e3);document.addEventListener("visibilitychange",function(){if(!document.hidden&&!UPD)updCheck(false)});
 /* ===== 설정: 날짜 · 입시 데이터(학년도) · 학교 추가 ===== */
 var KP="gm27p",PK_LABEL="2027학년도 (기본)";
 function pkLoad(){try{return JSON.parse(localStorage.getItem(KP)||"null")}catch(e){return null}}
