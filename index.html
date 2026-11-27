@@ -1108,7 +1108,7 @@ function vRos(){
   "<div style='margin-top:10px'><label class='btn p' style='display:inline-block'>파일 선택<input type=file id=fi accept='.xlsx,.csv,.txt' style='display:none'></label></div>"+
   "<div class='xs mu' style='margin-top:7px'>번호·이름 머리글이 있는 시트를 자동으로 찾습니다</div></div>");
  h.push("<div class='fold' id=f1><button data-a=fold data-f=f1>＋ 엑셀에서 복사해 붙여넣기</button><div class=bd>"+
-  "<textarea id=ta placeholder='1  강지훈\n2  구도형'></textarea><div style='margin-top:7px'><button class='btn p sm' data-a=paste>붙여넣기 등록</button></div></div></div>");
+  "<textarea id=ta placeholder='1  김OO\n2  박OO'></textarea><div style='margin-top:7px'><button class='btn p sm' data-a=paste>붙여넣기 등록</button></div></div></div>");
  h.push("<div class='fold' id=f2><button data-a=fold data-f=f2>＋ 한 명씩 직접 추가</button><div class=bd>"+
   "<div style='display:flex;gap:6px'><input class=inp id=an placeholder=번호 style='width:72px'><input class=inp id=am placeholder=이름></div>"+
   "<div style='margin-top:7px'><button class='btn p sm' data-a=add1>추가</button></div></div></div>");
@@ -1514,7 +1514,7 @@ document.addEventListener("click",function(ev){
   var v=document.getElementById("ta").value||"";
   var b=window.XR.text(v);
   if(b&&b.r.length)upsert(b.r,"붙여넣기");
-  else{ST.msg={k:"er",t:"번호와 이름을 인식하지 못했습니다. 한 줄에 '1 강지훈' 형태로 넣어 주세요."};R()}
+  else{ST.msg={k:"er",t:"번호와 이름을 인식하지 못했습니다. 한 줄에 '1 김OO' 형태로 넣어 주세요."};R()}
   return;
  }
  if(a==="add1"){
@@ -1630,8 +1630,8 @@ function thOpen(){
  });
 }
 /* ===== 새 버전 확인 (웹 주소로 열었을 때) ===== */
-var APP_VER="2026-11-27.1";/*VER:2026-11-27.1*/
-/*NOTES:고입 도우미 첫 배포 버전: 일정·상담 도구·화면 꾸미기·설정*/
+var APP_VER="2026-11-27.2";/*VER:2026-11-27.2*/
+/*NOTES:학생 명렬 붙여넣기 예시를 가상 이름으로 변경*/
 function updBase(){return location.href.split("#")[0].split("?")[0]}
 function updMsg(t){var e=document.getElementById("stV");if(e)e.textContent=t}
 function updBar(ver,notes){
